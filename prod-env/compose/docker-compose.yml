@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+
+  traefik:
+    image: traefik:v2.9
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DATA_DIR}/traefik/traefik.toml:/etc/traefik/traefik.toml
+      - ${DATA_DIR}/traefik/acme.json:/acme.json
+
+  app:
+    image: ghcr.io/edythecow/uio-cafeteria:master
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP
+      - "traefik.http.routers.uio-cafeteria.entrypoints=web"
+      - "traefik.http.routers.uio-cafeteria.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.uio-cafeteria.middlewares=uio-cafeteria_https"
+      - "traefik.http.middlewares.uio-cafeteria_https.redirectscheme.scheme=https"
+      # HTTPS
+      - "traefik.http.routers.uio-cafeteria_https.entrypoints=websecure"
+      - "traefik.http.routers.uio-cafeteria_https.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.uio-cafeteria_https.tls=true"
+      - "traefik.http.routers.uio-cafeteria_https.tls.certresolver=letsencrypt"
