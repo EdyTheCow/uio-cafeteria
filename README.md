@@ -3,7 +3,7 @@ Originally assigned as programming task in python, was converted to javascript u
 
 Furthermore, detailed documentation of application's prod and dev enviroment is provided. GitHub actions are triggered on commit, which create and publish docker image on this repository.
 
-Commits also trigger Netlify which pulls the latest code from this repository, builds and runs the application in production accessable to public.
+Commits also trigger Netlify which pulls the latest code from this repository, builds and runs the application in production accessable to public. Live version running on Netlify can be found at https://uio-cafeteria.edy.io/
 
 # 🏗️ Deployment
 Instructions for deploying the application. Pick one of the three alternatives:
